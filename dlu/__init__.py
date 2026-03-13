@@ -1,18 +1,26 @@
 """DLU - Deep Learning Utilities for PyTorch.
 
 A collection of utilities for deep learning research, including:
-- Neural network modules (DenseNetwork, Attention, Transformer)
+- Neural network modules (DenseNetwork, RMSNorm, RoPE, SwiGLU, Transformer)
 - Training loop utilities with pluggable logging
-- Learning rate schedulers
+- Learning rate schedulers (warmup + cosine decay, warmup + sqrt decay)
 - Data transformation and plotting utilities
 """
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 
 # Neural network modules
-from .modules import DenseNetwork, Attention, Transformer
+from .modules import (
+    DenseNetwork,
+    RMSNorm,
+    RotaryPositionEmbedding,
+    SwiGLU,
+    MultiHeadAttention,
+    TransformerBlock,
+    Transformer,
+)
 
 # Schedulers
-from .schedulers import LinearWarmupSqrtDecay
+from .schedulers import LinearWarmupSqrtDecay, get_cosine_schedule_with_warmup
 
 # Utilities
 from .utils import params
@@ -36,10 +44,15 @@ __all__ = [
     "__version__",
     # Modules
     "DenseNetwork",
-    "Attention",
+    "RMSNorm",
+    "RotaryPositionEmbedding",
+    "SwiGLU",
+    "MultiHeadAttention",
+    "TransformerBlock",
     "Transformer",
     # Schedulers
     "LinearWarmupSqrtDecay",
+    "get_cosine_schedule_with_warmup",
     # Utilities
     "params",
     # Transforms
