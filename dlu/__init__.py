@@ -34,6 +34,7 @@ from .plotting import plot_tensor
 # Subpackages
 from . import logging
 from . import training
+from . import lora
 
 # Convenience aliases
 norm = normalize
@@ -64,4 +65,5 @@ __all__ = [
     # Subpackages
     "logging",
     "training",
+    "lora",
 ]

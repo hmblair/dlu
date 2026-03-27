@@ -1,0 +1,32 @@
+[project]
+name = "dlu"
+version = "0.4.0"
+description = "Deep Learning Utilities for PyTorch"
+authors = [{ name = "Hamish M. Blair", email = "hmblair@stanford.edu" }]
+license = { text = "MIT" }
+requires-python = ">=3.9"
+dependencies = [
+    "numpy",
+    "torch",
+    "tqdm",
+    "matplotlib",
+    "rich",
+]
+
+[project.optional-dependencies]
+wandb = ["wandb"]
+all = ["wandb"]
+dev = ["pytest", "ruff"]
+
+[project.urls]
+Homepage = "https://github.com/hmblair/dlu"
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["dlu*"]
+
+[tool.ruff]
+line-length = 88
