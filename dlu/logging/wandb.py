@@ -86,7 +86,7 @@ class WandbLogger:
         Args:
             metrics: Dictionary of metric names to values.
         """
-        self._wandb.log(metrics)
+        self._run.log(metrics)
 
     def log_epoch(self, epoch: int, metrics: dict[str, float]) -> None:
         """Log metrics at the end of an epoch.
@@ -95,7 +95,7 @@ class WandbLogger:
             epoch: Current epoch number.
             metrics: Dictionary of metric names to values.
         """
-        self._wandb.log(metrics, step=epoch)
+        self._run.log(metrics, step=epoch)
 
     def close(self) -> None:
         """Finish the wandb run and clean up resources."""
