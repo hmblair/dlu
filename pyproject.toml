@@ -1,5 +1,5 @@
 [project]
-name = "dlu"
+name = "dlu-torch"
 version = "0.4.0"
 description = "Deep Learning Utilities for PyTorch"
 authors = [{ name = "Hamish M. Blair", email = "hmblair@stanford.edu" }]
