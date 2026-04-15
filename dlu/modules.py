@@ -2,6 +2,7 @@
 
 This module provides common neural network components for deep learning:
 - DenseNetwork: Configurable multi-layer perceptron
+- RadialBasisFunctions: Learnable Gaussian basis functions for scalar featurization
 - RMSNorm: Root Mean Square Layer Normalization
 - RotaryPositionEmbedding: Rotary Position Embeddings (RoPE)
 - SwiGLU: Gated feedforward network with Swish activation
@@ -79,6 +80,40 @@ class DenseNetwork(nn.Module):
             x = self.dropout(x)
 
         return self.layers[-1](x)
+
+
+class RadialBasisFunctions(nn.Module):
+    """Radial basis functions with learnable centers and widths.
+
+    Each function is a Gaussian parameterized by a learnable mean (mu) and
+    inverse width (sigma). Useful for featurizing scalar inputs (e.g.
+    distances) into a higher-dimensional space.
+
+    Args:
+        num_functions: Number of radial basis functions.
+
+    Example:
+        >>> rbf = RadialBasisFunctions(16)
+        >>> distances = torch.randn(32, 100)  # (batch, num_distances)
+        >>> features = rbf(distances)  # shape: (32, 100, 16)
+    """
+
+    def __init__(self, num_functions: int) -> None:
+        super().__init__()
+        self.mu = nn.Parameter(torch.randn(num_functions))
+        self.sigma = nn.Parameter(torch.randn(num_functions))
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Evaluate all basis functions at each input value.
+
+        Args:
+            x: Input tensor of shape (...).
+
+        Returns:
+            Tensor of shape (..., num_functions).
+        """
+        exp = (x[..., None] - self.mu) * self.sigma ** 2
+        return torch.exp(-exp ** 2) * self.sigma.abs()
 
 
 class RMSNorm(nn.Module):

@@ -11,6 +11,7 @@ __version__ = "0.4.0"
 # Neural network modules
 from .modules import (
     DenseNetwork,
+    RadialBasisFunctions,
     RMSNorm,
     RotaryPositionEmbedding,
     SwiGLU,
@@ -45,6 +46,7 @@ __all__ = [
     "__version__",
     # Modules
     "DenseNetwork",
+    "RadialBasisFunctions",
     "RMSNorm",
     "RotaryPositionEmbedding",
     "SwiGLU",
