@@ -7,7 +7,7 @@ A collection of utilities for deep learning research, including:
 - Data transformation and plotting utilities
 """
 
-__version__ = "0.4.0"
+__version__ = "0.4.1"
 
 # Neural network modules
 # Subpackages
