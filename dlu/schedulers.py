@@ -3,11 +3,13 @@
 This module provides custom learning rate schedulers that extend
 PyTorch's scheduler functionality.
 """
+
 from __future__ import annotations
 
 import math
+from typing import Any
 
-from torch.optim.lr_scheduler import _LRScheduler, LambdaLR
+from torch.optim.lr_scheduler import LambdaLR, _LRScheduler
 from torch.optim.optimizer import Optimizer
 
 
@@ -39,8 +41,8 @@ class LinearWarmupSqrtDecay(_LRScheduler):
         self: LinearWarmupSqrtDecay,
         optimizer: Optimizer,
         warmup_steps: int,
-        *args,
-        **kwargs,
+        *args: Any,
+        **kwargs: Any,
     ) -> None:
         self.warmup_steps = warmup_steps
         super().__init__(optimizer, *args, **kwargs)
@@ -52,7 +54,7 @@ class LinearWarmupSqrtDecay(_LRScheduler):
             List of learning rates for each parameter group.
         """
         if self.last_epoch == -1:
-            return [group['lr'] for group in self.optimizer.param_groups]
+            return [group["lr"] for group in self.optimizer.param_groups]
         elif self.last_epoch < self.warmup_steps:
             return self._warmup_step()
         else:
@@ -65,10 +67,7 @@ class LinearWarmupSqrtDecay(_LRScheduler):
             List of learning rates scaled linearly based on current step.
         """
         scale = (self.last_epoch + 1) / self.warmup_steps
-        return [
-            group['initial_lr'] * scale
-            for group in self.optimizer.param_groups
-        ]
+        return [group["initial_lr"] * scale for group in self.optimizer.param_groups]
 
     def _decay_step(self) -> list[float]:
         """Compute learning rate during inverse square-root decay phase.
@@ -78,8 +77,7 @@ class LinearWarmupSqrtDecay(_LRScheduler):
         """
         scale = (self.last_epoch + 2) / (self.last_epoch + 1)
         return [
-            group['lr'] * (scale ** (-1/2))
-            for group in self.optimizer.param_groups
+            group["lr"] * (scale ** (-1 / 2)) for group in self.optimizer.param_groups
         ]
 
 

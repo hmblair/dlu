@@ -6,36 +6,34 @@ A collection of utilities for deep learning research, including:
 - Learning rate schedulers (warmup + cosine decay, warmup + sqrt decay)
 - Data transformation and plotting utilities
 """
+
 __version__ = "0.4.0"
 
 # Neural network modules
+# Subpackages
+from . import logging, lora, training
 from .modules import (
     DenseNetwork,
+    MultiHeadAttention,
     RadialBasisFunctions,
     RMSNorm,
     RotaryPositionEmbedding,
     SwiGLU,
-    MultiHeadAttention,
-    TransformerBlock,
     Transformer,
+    TransformerBlock,
 )
-
-# Schedulers
-from .schedulers import LinearWarmupSqrtDecay, get_cosine_schedule_with_warmup
-
-# Utilities
-from .utils import params
-
-# Transforms
-from .transforms import normalize
 
 # Plotting
 from .plotting import plot_tensor
 
-# Subpackages
-from . import logging
-from . import training
-from . import lora
+# Schedulers
+from .schedulers import LinearWarmupSqrtDecay, get_cosine_schedule_with_warmup
+
+# Transforms
+from .transforms import normalize
+
+# Utilities
+from .utils import params
 
 # Convenience aliases
 norm = normalize

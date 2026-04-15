@@ -2,6 +2,7 @@
 
 This module defines the interface that all training loggers must implement.
 """
+
 from __future__ import annotations
 
 from typing import Protocol

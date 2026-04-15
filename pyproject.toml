@@ -16,7 +16,7 @@ dependencies = [
 [project.optional-dependencies]
 wandb = ["wandb"]
 all = ["wandb"]
-dev = ["pytest", "ruff"]
+dev = ["pytest", "ruff", "mypy"]
 
 [project.urls]
 Homepage = "https://github.com/hmblair/dlu"
@@ -30,3 +30,38 @@ include = ["dlu*"]
 
 [tool.ruff]
 line-length = 88
+target-version = "py39"
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "SIM",  # flake8-simplify
+]
+ignore = [
+    "E501",   # line length (handled by formatter)
+    "UP007",  # use X | Y for unions (requires 3.10+)
+    "UP045",  # use X | None for optionals (requires 3.10+)
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["dlu"]
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = false
+warn_unused_configs = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "dlu.modules"
+disable_error_code = ["index", "arg-type", "assignment", "override"]
+
+[[tool.mypy.overrides]]
+module = "dlu.schedulers"
+disable_error_code = ["override"]

@@ -3,6 +3,7 @@
 This module provides functions for transforming and normalizing tensors,
 with proper handling of NaN values.
 """
+
 from __future__ import annotations
 
 import torch

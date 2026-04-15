@@ -3,17 +3,18 @@
 This module provides a high-level training loop that coordinates
 data iteration, optimization, and logging.
 """
+
 from __future__ import annotations
 
 import random
-from typing import Iterable, Iterator, Sequence
+from collections.abc import Iterable, Iterator, Sequence
 
 import torch
-from torch.optim.optimizer import Optimizer
 from torch.optim.lr_scheduler import _LRScheduler
+from torch.optim.optimizer import Optimizer
 
-from .tracker import LossTracker
 from ..logging import ConsoleProgress, TrainingLogger
+from .tracker import LossTracker
 
 
 class TrainingLoop:

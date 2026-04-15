@@ -3,9 +3,10 @@
 This module provides a progress bar for training that displays
 loss and other metrics in the terminal.
 """
+
 from __future__ import annotations
 
-from typing import Iterable, Iterator
+from collections.abc import Iterable, Iterator
 
 from tqdm import tqdm
 
@@ -67,17 +68,15 @@ class ConsoleProgress:
             metrics: Dictionary containing at least 'loss' key.
         """
         if self._pbar is None:
-            raise RuntimeError(
-                "start_epoch() must be called before update()"
-            )
+            raise RuntimeError("start_epoch() must be called before update()")
 
         if "loss" in metrics:
             self._current_loss = metrics["loss"]
             # Update running average
             step = self._pbar.n
-            self._average_loss = (
-                step * self._average_loss + self._current_loss
-            ) / (step + 1)
+            self._average_loss = (step * self._average_loss + self._current_loss) / (
+                step + 1
+            )
 
         self._pbar.set_description(self._format_description())
 
@@ -91,9 +90,7 @@ class ConsoleProgress:
             RuntimeError: If start_epoch() was not called first.
         """
         if self._pbar is None:
-            raise RuntimeError(
-                "start_epoch() must be called before iteration"
-            )
+            raise RuntimeError("start_epoch() must be called before iteration")
         return iter(self._pbar)
 
     def log_step(self, metrics: dict[str, float]) -> None:

@@ -3,7 +3,10 @@
 This module provides convenience functions for plotting PyTorch tensors
 using matplotlib.
 """
+
 from __future__ import annotations
+
+from typing import Any
 
 import matplotlib.pyplot as plt
 import torch
@@ -14,7 +17,7 @@ def plot_tensor(
     y: torch.Tensor,
     start: float | None = None,
     end: float | None = None,
-    **kwargs,
+    **kwargs: Any,
 ) -> None:
     """Plot a 1D tensor on matplotlib axes.
 

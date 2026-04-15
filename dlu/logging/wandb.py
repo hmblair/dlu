@@ -4,12 +4,13 @@ This module provides wandb logging with lazy imports, so wandb is only
 required when actually used. Users without wandb installed can still
 use other parts of the library.
 """
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    import wandb
+    pass
 
 # Lazy import state
 _wandb_module: Any = None
@@ -27,6 +28,7 @@ def _get_wandb() -> Any:
     if _wandb_available is None:
         try:
             import wandb as wb
+
             _wandb_module = wb
             _wandb_available = True
         except ImportError:
@@ -73,8 +75,7 @@ class WandbLogger:
         wb = _get_wandb()
         if wb is None:
             raise ImportError(
-                "wandb is required for WandbLogger. "
-                "Install with: pip install wandb"
+                "wandb is required for WandbLogger. Install with: pip install wandb"
             )
 
         self._wandb = wb

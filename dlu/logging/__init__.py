@@ -3,6 +3,7 @@
 This package provides pluggable logging backends for training loops,
 including console progress bars and optional Weights & Biases integration.
 """
+
 from __future__ import annotations
 
 from .base import TrainingLogger

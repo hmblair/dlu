@@ -95,9 +95,7 @@ class LoRALinear(nn.Module):
         return self.base.bias
 
 
-def _get_parent_and_child(
-    model: nn.Module, name: str
-) -> tuple[nn.Module, str]:
+def _get_parent_and_child(model: nn.Module, name: str) -> tuple[nn.Module, str]:
     parts = name.rsplit(".", 1)
     if len(parts) == 2:
         parent = model.get_submodule(parts[0])
@@ -153,15 +151,11 @@ def freeze_base(model: nn.Module) -> None:
 def lora_state_dict(model: nn.Module) -> dict[str, torch.Tensor]:
     """Extract only the LoRA parameters from the model state dict."""
     return {
-        k: v
-        for k, v in model.state_dict().items()
-        if ".lora_A" in k or ".lora_B" in k
+        k: v for k, v in model.state_dict().items() if ".lora_A" in k or ".lora_B" in k
     }
 
 
-def load_lora_state_dict(
-    model: nn.Module, state_dict: dict[str, torch.Tensor]
-) -> None:
+def load_lora_state_dict(model: nn.Module, state_dict: dict[str, torch.Tensor]) -> None:
     """Load LoRA parameters into a model that already has LoRA injected."""
     model.load_state_dict(state_dict, strict=False)
 

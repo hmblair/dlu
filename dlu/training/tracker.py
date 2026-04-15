@@ -3,6 +3,7 @@
 This module provides a simple class for tracking training metrics
 such as loss values and computing running averages.
 """
+
 from __future__ import annotations
 
 
@@ -57,9 +58,9 @@ class LossTracker:
         self.current_loss = loss
 
         # Update running average
-        self.average_loss = (
-            self.current_step * self.average_loss + loss
-        ) / (self.current_step + 1)
+        self.average_loss = (self.current_step * self.average_loss + loss) / (
+            self.current_step + 1
+        )
 
     @property
     def metrics(self) -> dict[str, float]:

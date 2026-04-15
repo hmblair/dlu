@@ -10,6 +10,7 @@ This module provides common neural network components for deep learning:
 - TransformerBlock: Pre-LN transformer block
 - Transformer: Full transformer encoder
 """
+
 from __future__ import annotations
 
 from typing import Optional
@@ -112,8 +113,8 @@ class RadialBasisFunctions(nn.Module):
         Returns:
             Tensor of shape (..., num_functions).
         """
-        exp = (x[..., None] - self.mu) * self.sigma ** 2
-        return torch.exp(-exp ** 2) * self.sigma.abs()
+        exp = (x[..., None] - self.mu) * self.sigma**2
+        return torch.exp(-(exp**2)) * self.sigma.abs()
 
 
 class RMSNorm(nn.Module):
@@ -195,7 +196,9 @@ class RotaryPositionEmbedding(nn.Module):
 
         return self._rotate(q, cos, sin), self._rotate(k, cos, sin)
 
-    def _rotate(self, x: torch.Tensor, cos: torch.Tensor, sin: torch.Tensor) -> torch.Tensor:
+    def _rotate(
+        self, x: torch.Tensor, cos: torch.Tensor, sin: torch.Tensor
+    ) -> torch.Tensor:
         x1, x2 = x[..., : x.shape[-1] // 2], x[..., x.shape[-1] // 2 :]
         rotated = torch.cat([-x2, x1], dim=-1)
         return x * cos + rotated * sin
@@ -261,7 +264,9 @@ class MultiHeadAttention(nn.Module):
         super().__init__()
 
         if d_model % num_heads != 0:
-            raise ValueError(f"d_model ({d_model}) must be divisible by num_heads ({num_heads})")
+            raise ValueError(
+                f"d_model ({d_model}) must be divisible by num_heads ({num_heads})"
+            )
 
         self.d_model = d_model
         self.num_heads = num_heads
@@ -320,7 +325,9 @@ class MultiHeadAttention(nn.Module):
 
         if mask is not None:
             combined_mask = mask.unsqueeze(1).unsqueeze(2).expand(-1, -1, L, -1)
-            combined_mask = combined_mask.float().masked_fill(combined_mask, float("-inf"))
+            combined_mask = combined_mask.float().masked_fill(
+                combined_mask, float("-inf")
+            )
 
         if attn_bias is not None:
             if attn_bias.dim() == 3:
@@ -331,19 +338,26 @@ class MultiHeadAttention(nn.Module):
                 combined_mask = attn_bias
 
         if self.is_causal and combined_mask is not None:
-            causal = torch.triu(torch.ones(L, L, device=x.device, dtype=torch.bool), diagonal=1)
+            causal = torch.triu(
+                torch.ones(L, L, device=x.device, dtype=torch.bool), diagonal=1
+            )
             causal_mask = causal.float().masked_fill(causal, float("-inf"))
             combined_mask = combined_mask + causal_mask
 
         if self.is_causal and combined_mask is None:
             out = F.scaled_dot_product_attention(
-                q, k, v,
+                q,
+                k,
+                v,
                 dropout_p=self.dropout.p if self.training else 0.0,
                 is_causal=True,
             )
         else:
             out = F.scaled_dot_product_attention(
-                q, k, v, attn_mask=combined_mask,
+                q,
+                k,
+                v,
+                attn_mask=combined_mask,
                 dropout_p=self.dropout.p if self.training else 0.0,
             )
 
@@ -384,7 +398,9 @@ class TransformerBlock(nn.Module):
 
         self.norm1 = RMSNorm(d_model)
         self.norm2 = RMSNorm(d_model)
-        self.attn = MultiHeadAttention(d_model, num_heads, dropout, max_seq_len, use_rope, qk_norm, is_causal)
+        self.attn = MultiHeadAttention(
+            d_model, num_heads, dropout, max_seq_len, use_rope, qk_norm, is_causal
+        )
         self.ffn = SwiGLU(d_model, d_ff, dropout)
         self.dropout = nn.Dropout(dropout)
 
@@ -440,12 +456,21 @@ class Transformer(nn.Module):
         self.num_layers = num_layers
         self.num_heads = num_heads
 
-        self.layers = nn.ModuleList([
-            TransformerBlock(
-                d_model, num_heads, d_ff, dropout, max_seq_len, use_rope, qk_norm, is_causal
-            )
-            for _ in range(num_layers)
-        ])
+        self.layers = nn.ModuleList(
+            [
+                TransformerBlock(
+                    d_model,
+                    num_heads,
+                    d_ff,
+                    dropout,
+                    max_seq_len,
+                    use_rope,
+                    qk_norm,
+                    is_causal,
+                )
+                for _ in range(num_layers)
+            ]
+        )
         self.final_norm = RMSNorm(d_model)
 
     def forward(
